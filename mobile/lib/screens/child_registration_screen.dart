@@ -54,7 +54,7 @@ class _ChildRegistrationScreenState
 
     try {
       final response = await dio.post(
-        'http://10.220.122.166:8000/api/children',
+        'http://10.1.94.67:8000/api/children',
         data: {
           'name': nameController.text.trim(),
           'date_of_birth':
