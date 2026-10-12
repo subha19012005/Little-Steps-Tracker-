@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Development-only network security config.
+  Permits cleartext (HTTP) traffic to the local FastAPI backend only.
+  Does NOT affect HTTPS or any other host.
+  Remove or restrict this file before publishing to production.
+-->
+<network-security-config>
+    <domain-config cleartextTrafficPermitted="true">
+        <domain includeSubdomains="false">10.103.161.250</domain>
+    </domain-config>
+</network-security-config>

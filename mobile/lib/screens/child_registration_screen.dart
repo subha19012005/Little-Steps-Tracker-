@@ -1,5 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import '../config/app_config.dart';
+import 'qr_display_screen.dart';
 
 class ChildRegistrationScreen extends StatefulWidget {
   const ChildRegistrationScreen({super.key});
@@ -54,7 +56,7 @@ class _ChildRegistrationScreenState
 
     try {
       final response = await dio.post(
-        'http://10.1.94.67:8000/api/children',
+        '${AppConfig.baseUrl}/api/children',
         data: {
           'name': nameController.text.trim(),
           'date_of_birth':
@@ -70,27 +72,29 @@ class _ChildRegistrationScreenState
 
       final data = response.data;
 
-      showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            title: const Text('Child Registered'),
+      // Read the Child ID returned by the backend (key: "child_id")
+      // Backend: main.py line 61 — returns {"child_id": "CH-XXXXXX", ...}
+      final String? receivedId = data['child_id']?.toString();
+
+      if (receivedId == null || receivedId.trim().isEmpty) {
+        // ID missing from response — show error instead of a blank QR
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
             content: Text(
-              'Child ID: ${data['child_id']}\n\n'
-              'Name: ${data['name']}\n'
-              'Gender: ${data['gender']}\n'
-              'Centre: ${data['centre']}',
+              'Registration succeeded but no Child ID was returned. '
+              'Please contact support.',
             ),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                child: const Text('OK'),
-              ),
-            ],
-          );
-        },
+          ),
+        );
+        return;
+      }
+
+      // Navigate to QR Display Screen with the real Child ID
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => QrDisplayScreen(childId: receivedId.trim()),
+        ),
       );
     } on DioException catch (e) {
       if (!mounted) return;
