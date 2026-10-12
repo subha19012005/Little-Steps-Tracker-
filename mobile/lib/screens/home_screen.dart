@@ -1,8 +1,6 @@
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'qr_scanner_screen.dart';
-
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -45,6 +43,7 @@ class HomeScreen extends StatelessWidget {
 
             const SizedBox(height: 40),
 
+            // Register Child button
             SizedBox(
               width: double.infinity,
               child: ElevatedButton.icon(
@@ -57,6 +56,28 @@ class HomeScreen extends StatelessWidget {
                 icon: const Icon(Icons.person_add),
                 label: const Text(
                   'Register Child',
+                  style: TextStyle(fontSize: 16),
+                ),
+              ),
+            ),
+
+            const SizedBox(height: 16),
+
+            // Scan QR button
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton.icon(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => const QrScannerScreen(),
+                    ),
+                  );
+                },
+                icon: const Icon(Icons.qr_code_scanner),
+                label: const Text(
+                  'Scan QR',
                   style: TextStyle(fontSize: 16),
                 ),
               ),
